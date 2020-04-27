@@ -7,13 +7,14 @@ import (
 func Parse(policy string) string {
 	policy = strings.ToLower(policy)
 
-	pos := strings.Index(policy, ":")
-	key := policy[0:pos]
-	policy = policy[pos + 1:len(policy)]
-
 	var result string
 
-	result += key + ":\n\n"
+	if (strings.Index(policy, "content-security") == 0) {
+		pos := strings.Index(policy, ":")
+		key := policy[0:pos]
+		policy = policy[pos + 1:len(policy)]
+		result += key + ":\n\n"
+	}
 
 	directives := strings.Split(policy, ";")
 
