@@ -2,7 +2,11 @@
 
 A simple utility to make `Content-Security-Policy`s readable at the command line
 
-### Usage
+## Installation
+
+Download [the latest release from GitHub](https://github.com/mpchadwick/csp-parser/releases).
+
+## Usage
 
 Send it the Content-Security-Policy from `stdin`.
 
