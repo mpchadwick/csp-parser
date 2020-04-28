@@ -1,24 +1,20 @@
 package main
 
 import (
-	"bufio"
+	"flag"
 	"fmt"
 	parser "github.com/mpchadwick/csp-parser/src"
 	"os"
 )
 
+var url string
+
+func init() {
+	flag.StringVar(&url, "url", "", "The URL to check")
+	flag.Parse()
+}
+
 func main() {
-	reader := bufio.NewReader(os.Stdin)
-
-	for {
-		text, err := reader.ReadString('\n')
-		if err != nil {
-			break
-		}
-
-		result := parser.Parse(text)
-
-		fmt.Print(result)
-		os.Exit(0)
-	}
+	fmt.Println(parser.FromUrl(url))
+	os.Exit(0)
 }

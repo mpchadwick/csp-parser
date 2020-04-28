@@ -1,38 +1,31 @@
 package parser
 
 import (
-	"strings"
+	"log"
+	"net/http"
 )
 
-func Parse(policy string) string {
-	policy = strings.ToLower(policy)
-
-	var result string
-
-	if (strings.Index(policy, "content-security") == 0) {
-		pos := strings.Index(policy, ":")
-		key := policy[0:pos]
-		policy = policy[pos + 1:len(policy)]
-		result += key + ":\n\n"
+func FromUrl(url string) (string) {
+	resp, err := http.Get(url)
+	if err != nil {
+		log.Fatal(err)
 	}
 
-	directives := strings.Split(policy, ";")
+	defer resp.Body.Close()
 
-	for _, directive := range directives {
-		directive = strings.Trim(directive, " ")
-		parts := strings.Split(directive, " ")
-		var padding string
+	fromHeaders := fromHeaders(resp)
 
-		for i, part := range parts {
-			if (i > 0) {
-				padding = "    "
-			} else {
-				padding = "  "
-			}
-			result += padding + part + "\n"
-		}
-		result += "\n"
+	return fromHeaders
+}
+
+func fromHeaders(resp *http.Response) (string) {
+	if value, ok := resp.Header["Content-Security-Policy"]; ok {
+		return value[0]
 	}
 
-	return result
+	if value, ok := resp.Header["Content-Security-Policy-Report-Only"]; ok {
+		return value[0]
+	}
+
+	return ""
 }
