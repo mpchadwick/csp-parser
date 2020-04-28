@@ -19,13 +19,11 @@ func FromUrl(url string) (string) {
 }
 
 func fromHeaders(resp *http.Response) (string) {
-	if value, ok := resp.Header["Content-Security-Policy"]; ok {
-		return value[0]
+	value := resp.Header.Get("Content-Security-Policy")
+	
+	if value == "" {
+		value = resp.Header.Get("Content-Security-Policy-Report-Only")
 	}
 
-	if value, ok := resp.Header["Content-Security-Policy-Report-Only"]; ok {
-		return value[0]
-	}
-
-	return ""
+	return value
 }
